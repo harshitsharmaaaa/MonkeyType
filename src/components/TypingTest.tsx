@@ -129,30 +129,30 @@ export default function TypingTest() {
     };
   }, [isActive, isFinished]);
 
-  const finishTest = useCallback(() => {
-    if (isFinishedRef.current) return;
-    isFinishedRef.current = true;
-    setIsFinished(true);
-    setIsActive(false);
+   const finishTest = useCallback(() => {
+     if (isFinishedRef.current) return;
+     isFinishedRef.current = true;
+     setIsFinished(true);
+     setIsActive(false);
 
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
+     if (timerRef.current) {
+       clearInterval(timerRef.current);
+       timerRef.current = null;
+     }
 
-    const elapsed = startTimeRef.current
-      ? (Date.now() - startTimeRef.current) / 1000
-      : timerMode;
-    const used = Math.min(elapsed, timerMode);
-    setTimeUsed(Math.round(used));
+     const elapsed = startTimeRef.current
+       ? (Date.now() - startTimeRef.current) / 1000
+       : timerMode;
+     const used = Math.min(elapsed, timerMode);
+     setTimeUsed(Math.round(used));
 
-    const raw = calculateWPM(totalTypedRef.current, used);
-    setRawWpm(raw);
+     const raw = calculateWPM(totalTypedRef.current, used);
+     setRawWpm(raw);
 
-    const effectiveChars = totalTypedRef.current - extraCountRef.current;
-    const w = calculateWPM(effectiveChars, used);
-    setWpm(w);
-  }, [timerMode]);
+     const effectiveChars = totalTypedRef.current - extraCountRef.current;
+     const w = calculateWPM(effectiveChars, used);
+     setWpm(w);
+   }, [timerMode]);
 
   const processChar = useCallback((typedChar: string) => {
     if (isFinishedRef.current) return;
@@ -429,6 +429,8 @@ export default function TypingTest() {
             accuracy={calculateAccuracy(correctCount, incorrectCount)}
             correctChars={correctCount}
             incorrectChars={incorrectCount}
+            extraChars={extraCount}
+            missedChars={Math.max(0, chars.length - currentPos)}
             totalChars={totalTyped}
             timeUsed={timeUsed}
             onRestart={resetTest}

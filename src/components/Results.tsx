@@ -6,6 +6,8 @@ interface ResultsProps {
   accuracy: number;
   correctChars: number;
   incorrectChars: number;
+  extraChars: number;
+  missedChars: number;
   totalChars: number;
   timeUsed: number;
   onRestart: () => void;
@@ -17,6 +19,8 @@ export default function Results({
   accuracy,
   correctChars,
   incorrectChars,
+  extraChars,
+  missedChars,
   totalChars,
   timeUsed,
   onRestart,
@@ -40,20 +44,31 @@ export default function Results({
           <div>raw wpm</div>
         </div>
         <div className="text-center">
-          <div className="text-[#d1d0c5]">{correctChars}</div>
-          <div>correct</div>
+          <div className="text-[#3dd68c]">{correctChars}</div>
+          <div className="text-[#3dd68c]">correct</div>
         </div>
         <div className="text-center">
           <div className="text-[#ca4754]">{incorrectChars}</div>
-          <div>incorrect</div>
+          <div className="text-[#ca4754]">incorrect</div>
         </div>
         <div className="text-center">
-          <div className="text-[#d1d0c5]">{totalChars}</div>
-          <div>total</div>
+          <div className="text-[#ca4754]">{extraChars}</div>
+          <div className="text-[#ca4754]">extra</div>
+        </div>
+        <div className="text-center">
+          <div className="text-[#d1d0c5]">{missedChars}</div>
+          <div>missed</div>
         </div>
         <div className="text-center">
           <div className="text-[#d1d0c5]">{timeUsed}s</div>
           <div>time</div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4 text-sm text-[#646669] mt-4">
+        <div className="text-center">
+          <div className="text-[#d1d0c5] font-mono">{correctChars}/{incorrectChars}/{extraChars}/{missedChars}</div>
+          <div>characters</div>
         </div>
       </div>
 

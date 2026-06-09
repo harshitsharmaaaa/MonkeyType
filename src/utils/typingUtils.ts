@@ -8,5 +8,6 @@ export function calculateWPM(characters: number, timeInSeconds: number): number 
 export function calculateAccuracy(correct: number, incorrect: number): number {
   const total = correct + incorrect;
   if (total === 0) return 100;
+  // Accuracy = correct characters / characters that were actually typed (attempted)
   return Math.round((correct / total) * 100);
 }

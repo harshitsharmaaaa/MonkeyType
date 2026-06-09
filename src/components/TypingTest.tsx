@@ -12,6 +12,7 @@ type CharStatus = 'pending' | 'correct' | 'incorrect' | 'extra';
 interface CharData {
   char: string;
   status: CharStatus;
+  typed?: string; // Store what user actually typed if different from expected
 }
 
 const WORD_COUNT = 200;
@@ -223,28 +224,27 @@ export default function TypingTest() {
     }
 
     const expectedChar = currentChars[pos].char;
-    const isCorrect = typedChar === (expectedChar === ' ' ? ' ' : typedChar);
     const isSpaceExpected = expectedChar === ' ';
     const isSpaceTyped = typedChar === ' ';
 
-    if (isSpaceExpected && isSpaceTyped && isCorrect) {
+    if (isSpaceExpected && isSpaceTyped) {
+      // Space typed when space expected = correct
       currentChars[pos] = { char: ' ', status: 'correct' };
       correctCountRef.current += 1;
       setCorrectCount(correctCountRef.current);
     } else if (isSpaceExpected && !isSpaceTyped) {
-      currentChars[pos] = { char: expectedChar, status: 'incorrect' };
+      // Any letter typed when space expected = incorrect, show what was typed
+      currentChars[pos] = { char: ' ', status: 'incorrect', typed: typedChar };
       incorrectCountRef.current += 1;
       setIncorrectCount(incorrectCountRef.current);
     } else if (typedChar === expectedChar) {
+      // Letter matches expected letter = correct
       currentChars[pos] = { char: expectedChar, status: 'correct' };
       correctCountRef.current += 1;
       setCorrectCount(correctCountRef.current);
     } else {
-      if (isSpaceExpected && isSpaceTyped) {
-        currentChars[pos] = { char: ' ', status: 'incorrect' };
-      } else {
-        currentChars[pos] = { char: expectedChar, status: 'incorrect' };
-      }
+      // Letter doesn't match or space typed when letter expected = incorrect
+      currentChars[pos] = { char: expectedChar, status: 'incorrect', typed: typedChar };
       incorrectCountRef.current += 1;
       setIncorrectCount(incorrectCountRef.current);
     }
@@ -412,7 +412,7 @@ export default function TypingTest() {
                             className={`${getCharColor(charData.status)} transition-colors duration-75`}
                             style={{ whiteSpace: 'pre' }}
                           >
-                            {charData.char}
+                            {charData.typed !== undefined ? charData.typed : charData.char}
                           </span>
                         );
                       })}
